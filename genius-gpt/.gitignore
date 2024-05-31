@@ -36,5 +36,5 @@ yarn-error.log*
 next-env.d.ts
 
 # global and local environment
-.env 
+.env
 .env*.local

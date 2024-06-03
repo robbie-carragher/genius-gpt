@@ -1,15 +1,40 @@
-'use client';
-
+"use client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import TourInfo from "./TourInfo";
+import {
+  getExistingTour,
+  generateTourResponse,
+  createNewTour,
+} from "@/utlis/actions";
+import toast from "react-hot-toast"; // Ensure toast is imported
 
 const NewTour = () => {
+  const {
+    mutate,
+    isPending,
+    data: tour,
+  } = useMutation({
+    mutationFn: async (destination) => {
+      const newTour = await generateTourResponse(destination);
+      if (newTour) {
+        return newTour;
+      }
+      toast.error("No Matching City Found...");
+      return null;
+    },
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formDat = new FormData(e.currentTarget);
-    const destination = Object.fromEntries(formDat.entries())
+    const formData = new FormData(e.currentTarget);
+    const destination = Object.fromEntries(formData.entries());
     console.log(destination);
-    // Add your submission logic here
+    mutate(destination); // Trigger the mutation
   };
+
+  if (isPending) {
+    return <span className="loading loading-lg"></span>;
+  }
 
   return (
     <>
@@ -30,13 +55,20 @@ const NewTour = () => {
             name="country"
             required
           />
-          <button className="btn btn-primary join-item" type="submit">
+          {/* <button className="btn btn-primary join-item" type="submit">
             generate tour
+          </button> */}
+          <button
+            className="btn btn-primary join-item"
+            type="submit"
+            disabled={isPending}
+          >
+            {isPending ? "please wait..." : "generate tour"}
           </button>
         </div>
       </form>
       <div className="mt-16">
-        <TourInfo />
+        <div className="mt-16">{tour ? <TourInfo tour={tour} /> : null}</div>
       </div>
     </>
   );

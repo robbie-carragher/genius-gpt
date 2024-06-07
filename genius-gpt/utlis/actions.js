@@ -1,6 +1,6 @@
-
 "use server";
 import OpenAI from "openai";
+import prisma from "@/utlis/db"; 
 
 if (!process.env.OPENAI_API_KEY) {
   console.error("OPENAI_API_KEY is not set");
@@ -53,7 +53,6 @@ If you can't find info on exact ${city}, or ${city} does not exist, or its popul
       model: 'gpt-3.5-turbo',
       temperature: 0,
     });
-    console.log(response)
     // potentially returns a text with error message
     const tourData = JSON.parse(response.choices[0].message.content);
 
@@ -68,6 +67,54 @@ If you can't find info on exact ${city}, or ${city} does not exist, or its popul
   }
 };
 
+export const getExistingTour = async ({ city, country }) => {
+  return prisma.tour.findUnique({
+    where: {
+      city_country: {
+        city,
+        country,
+      },
+    },
+  });
+};
+
 export const createNewTour = async (tour) => {
-  return null;
+  return prisma.tour.create({
+    data: tour,
+  });
+};
+
+export const getAllTours = async (searchTerm) => {
+  if (!searchTerm) {
+    const tours = await prisma.tour.findMany({
+      orderBy: {
+        city: 'asc',
+      },
+    });
+
+    return tours;
+  }
+
+  const tours = await prisma.tour.findMany({
+    where: {
+      OR: [
+        {
+          city: {
+            contains: searchTerm,
+          },
+        },
+        {
+          country: {
+            contains: searchTerm,
+          },
+        },
+      ],
+    },
+    orderBy: {
+      city: 'asc',
+    },
+    
+  });
+
+  return tours;
 };

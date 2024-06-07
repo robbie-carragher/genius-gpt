@@ -9,22 +9,17 @@ import {
 import toast from "react-hot-toast"; // Ensure toast is imported
 
 const NewTour = () => {
-  const queryClient = useQueryClient()
   const {
     mutate,
     isPending,
     data: tour,
   } = useMutation({
     mutationFn: async (destination) => {
-      const existingTour = await getExistingTour(destination);
-      if (existingTour) return existingTour;
       const newTour = await generateTourResponse(destination);
       if (newTour) {
-        await createNewTour(newTour);
-        queryClient.invalidateQueries({ queryKey: ['tours'] });
         return newTour;
       }
-      toast.error('No matching city found...');
+      toast.error("No Matching City Found...");
       return null;
     },
   });
@@ -44,7 +39,7 @@ const NewTour = () => {
   return (
     <>
       <form onSubmit={handleSubmit} action="" className="max-w-2xl">
-        <h2 className="mb-4 text-3xl">Select your Dream Destination</h2>
+        <h2 className="mb-4">Select your Dream Destination</h2>
         <div className="join w-full">
           <input
             type="text"
@@ -60,6 +55,9 @@ const NewTour = () => {
             name="country"
             required
           />
+          {/* <button className="btn btn-primary join-item" type="submit">
+            generate tour
+          </button> */}
           <button
             className="btn btn-primary join-item"
             type="submit"

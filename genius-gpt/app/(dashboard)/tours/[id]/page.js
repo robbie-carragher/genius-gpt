@@ -1,9 +1,19 @@
-import React from 'react'
-
-const SingleTourPage = () => {
+import TourInfo from '@/components/TourInfo';
+import { getSingleTour } from '@/utlis/actions';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+const SingleTourPage = async ({ params }) => {
+  const tour = await getSingleTour(params.id);
+  if (!tour) {
+    redirect('/tours');
+  }
   return (
-    <div>SingleTourPage</div>
-  )
-}
-
-export default SingleTourPage
+    <div>
+      <Link href='/tours' className='btn btn-secondary mb-12'>
+        back to tours
+      </Link>
+      <TourInfo tour={tour} />
+    </div>
+  );
+};
+export default SingleTourPage;

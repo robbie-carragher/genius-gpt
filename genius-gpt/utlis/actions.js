@@ -1,6 +1,6 @@
 "use server";
 import OpenAI from "openai";
-import prisma from "@/utlis/db";
+import prisma from "@/utlis/db"; 
 
 if (!process.env.OPENAI_API_KEY) {
   console.error("OPENAI_API_KEY is not set");
@@ -16,15 +16,15 @@ export const generateChatResponse = async (chatMessages) => {
   try {
     const response = await openai.chat.completions.create({
       messages: [
-        { role: "system", content: "you are a helpful assistant" },
+        { role: 'system', content: 'you are a helpful assistant' },
         ...chatMessages,
       ],
-      model: "gpt-3.5-turbo",
+      model: 'gpt-3.5-turbo',
       temperature: 0,
     });
     return response.choices[0].message;
   } catch (error) {
-    console.error("Error generating chat response:", error);
+    console.error('Error generating chat response:', error);
     return null;
   }
 };
@@ -47,10 +47,10 @@ If you can't find info on exact ${city}, or ${city} does not exist, or its popul
   try {
     const response = await openai.chat.completions.create({
       messages: [
-        { role: "system", content: "you are a tour guide" },
-        { role: "user", content: query },
+        { role: 'system', content: 'you are a tour guide' },
+        { role: 'user', content: query },
       ],
-      model: "gpt-3.5-turbo",
+      model: 'gpt-3.5-turbo',
       temperature: 0,
     });
     // potentially returns a text with error message
@@ -88,7 +88,7 @@ export const getAllTours = async (searchTerm) => {
   if (!searchTerm) {
     const tours = await prisma.tour.findMany({
       orderBy: {
-        city: "asc",
+        city: 'asc',
       },
     });
 
@@ -111,43 +111,10 @@ export const getAllTours = async (searchTerm) => {
       ],
     },
     orderBy: {
-      city: "asc",
+      city: 'asc',
     },
+    
   });
 
   return tours;
 };
-
-export const getSingleTour = async (id) => {
-  return prisma.tour.findUnique({
-    where: {
-      id,
-    },
-  });
-};
-
-export const generateTourImage = async ({ city, country }) => {
-  try {
-    const tourImage = await openai.images.generate({
-      prompt: `a panoramic view of the ${city} ${country}`,
-      n: 1,
-      size: "512x512",
-    });
-    return tourImage?.data[0]?.url;
-  } catch (error) {
-return null;
-  }
-};
-
-// export const generateTourImage = async ({ city, country }) => {
-//   try {
-//     const tourImage = await openai.images.generate({
-//       prompt: `a panoramic view of the ${city} ${country}`,
-//       n: 1,
-//       size: '512x512',
-//     });
-//     return tourImage?.data[0]?.url;
-//   } catch (error) {
-//     return null;
-//   }
-// };

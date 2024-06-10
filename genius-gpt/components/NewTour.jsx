@@ -78,15 +78,11 @@
 
 // export default NewTour;
 
+
 "use client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import TourInfo from "./TourInfo";
-import {
-  getExistingTour,
-  generateTourResponse,
-  createNewTour,
-  generateTourImage,
-} from "@/utlis/actions";
+import { getExistingTour, generateTourResponse, createNewTour } from "@/utlis/actions";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import Image from "next/image";
@@ -103,14 +99,11 @@ const NewTour = () => {
     mutationFn: async (destination) => {
       const existingTour = await getExistingTour(destination);
       if (existingTour) return existingTour;
-
       const newTour = await generateTourResponse(destination);
       if (newTour) {
-        const image = await generateTourImage(destination);
-        newTour.image = image;  // Assuming `createNewTour` handles storing this
         await createNewTour(newTour);
         queryClient.invalidateQueries({ queryKey: ['tours'] });
-        setTourImage(image);  // Set the generated image URL
+        setTourImage(newTour.image); // Set the fetched image URL
         return newTour;
       }
       toast.error('No matching city found...');
@@ -132,7 +125,7 @@ const NewTour = () => {
   return (
     <>
       <form onSubmit={handleSubmit} action="" className="max-w-2xl">
-        <h2 className="mb-4">Select your Dream Destination</h2>
+        <h2 className="mb-4 text-3xl">Select your Dream Destination</h2>
         <div className="join w-full">
           <input
             type="text"

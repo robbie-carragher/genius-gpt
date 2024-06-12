@@ -27,12 +27,6 @@ const NewTour = () => {
     mutationFn: async (destination) => {
       const existingTour = await getExistingTour(destination);
 
-      // If the tour already exists, set the image and return the tour
-      // if (existingTour) {
-      //   setTourImage(existingTour.image);
-      //   return { tour: existingTour, tokens: 0 };
-      // }
-
       if (existingTour) return existingTour;
 
       // Fetch the current token balance for the user
@@ -51,14 +45,8 @@ const NewTour = () => {
         return null;
       }
 
-      // Create the new tour in the database
       const repsonse = await createNewTour(newTour.tour);
       queryClient.invalidateQueries({ queryKey: ['tours'] });
-
-      // Set the image URL for the new tour
-      // setTourImage(newTour.tour.image);
-
-      // Subtract the tokens used for generating the tour and display the remaining token balance
       const newTokens = await subtractTokens(userId, newTour.tokens);
       toast.success(`${newTokens} tokens remaining...`);
       
@@ -106,18 +94,6 @@ const NewTour = () => {
         </div>
       </form>
       <div className="mt-16">
-        {/* {tourImage ? (
-          <div>
-            <Image
-              src={tourImage}
-              width={300}
-              height={300}
-              className='rounded-xl shadow-xl mb-16 h-96 w-96 object-cover'
-              alt="Generated Tour Image"
-              priority
-            />
-          </div>
-        ) : null} */}
         <div className="mt-16">{tourResponse ? <TourInfo tour={tourResponse} /> : null}</div>
       </div>
     </>

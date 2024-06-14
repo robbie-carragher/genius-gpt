@@ -10,14 +10,12 @@ import {
   subtractTokens,
 } from "@/utlis/actions";
 import toast from "react-hot-toast";
-// import { useState } from "react";
-// import Image from "next/image";
 import { useAuth } from "@clerk/nextjs"; // Ensure to import useAuth
 
 const NewTour = () => {
   const { userId } = useAuth(); // Ensure you get the userId correctly
   const queryClient = useQueryClient();
-  // const [tourImage, setTourImage] = useState(null);
+
 
   const {
     mutate,

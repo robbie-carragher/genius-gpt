@@ -1,4 +1,4 @@
-import TourInfo from '@/components/TourInfo';
+import TourInfo from '../../../../components/TourInfo';
 import prisma from "@/utlis/db"; 
 import Link from 'next/link';
 import Image from 'next/image';

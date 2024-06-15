@@ -1,5 +1,3 @@
-
-
 import SidebarHeader from './SidebarHeader';
 import NavLinks from './NavLinks';
 import MemberProfile from './MemberProfile';

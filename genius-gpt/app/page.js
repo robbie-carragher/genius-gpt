@@ -7,10 +7,11 @@ const HomePage = () => {
         <div className='max-w-md'>
           <h1 className='text-6xl font-bold text-primary'>GeniusGPT</h1>
           <p className='py-6 text-lg leading-loose'>
-            GPTGenius: Your AI language companion. Powered by OpenAI, it
-            enhances your conversations, content creation, and more!
+          AI-driven chat and travel planning. 
+          Enhance conversations and streamline tours.
+
           </p>
-          <Link href='/chat' className='btn btn-secondary '>
+          <Link href='/chat' className='btn btn-primary'>
             Get Started
           </Link>
         </div>

@@ -1,4 +1,4 @@
-import ToursPage from '@/components/ToursPage';
+import ToursPage from '../../../components/ToursPage';
 import {
   dehydrate,
   HydrationBoundary,
